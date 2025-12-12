@@ -1,0 +1,180 @@
+<!--ZhengJieRong H10008148-->>
+<!DOCTYPE html>
+<html>
+<head>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>AST Attendance System</title>
+  <style>
+  * {
+    box-sizing: border-box;
+  }
+
+  /* Create three equal columns that floats next to each other */
+  .column {
+    float: left;
+    padding: 10px;
+  }
+
+  .left, .right {
+    width: 40%;
+  }
+
+  .middle {
+    width: 20%;
+  }
+
+  /* Clear floats after the columns */
+  .row:after {
+    content: "";
+    display: table;
+    clear: both;
+  }
+
+  table, th, td {
+    /*TODO: define the border style of all tables to use single-border, black solid lines */
+    border: 2px solid #333;
+    border-collapse: collapse;
+  }
+
+  .center-content {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+
+  /* Responsive layout - makes the three columns stack on top of each other instead of next to each other */
+  @media screen and ( max-width: 600px ) {
+    .column {
+      width: 100%;
+    }
+  }
+</style>
+<script type="text/javascript">
+  absenteeCount = 0;
+  function addAbsentee(name) {
+    //TODO: 
+    /* 
+    	Create an HTML table row (i.e. tr element);
+    	Append a cell containing a checkbox to the row;
+    	Append another cell containing the "name" parameter's value to the row;
+    	Assign a unique id for the row and set it as the value of the checkbox;
+    	Append the row to the absentees table.
+   	*/
+    var row = document.createElement("tr");
+
+    var checkboxCell = document.createElement("td");
+    var checkbox = document.createElement("input");
+    checkbox.type = "checkbox";
+    checkbox.name = "absBoxes";
+
+    var uniqueId = "absentee_" + absenteeCount;
+    checkbox.value = uniqueId;
+    checkbox.id = uniqueId;
+    checkboxCell.appendChild(checkbox);
+
+    var nameCell = document.createElement("td");
+    nameCell.textContent = name;
+
+    row.appendChild(checkboxCell);
+    row.appendChild(nameCell);
+    row.id = uniqueId;
+
+    var absenteesTable=document.getElementById("absentees");
+    absenteesTable.appendChild(row);
+
+    absenteeCount++;
+
+  }
+
+  function moveRows(){
+    var boxes = document.getElementsByName("absBoxes");
+    //TODO: 
+    /* 
+    	Loop through boxes and move the selected rows (i.e. those with checked = true)
+       	from the absentees table to the presentees table.
+       	(Hint: 	Loop from the last to the first element of boxes to avoid missing of
+       	 		any selected elements due to removel of nodes from the absentees table.)
+    */
+   var boxes = document.getElementsByName("absBoxes");
+
+    for (var i = boxes.length - 1; i >= 0; i--) {
+        if (boxes[i].checked) {
+
+            var row = boxes[i].closest("tr");
+            var name = row.cells[1].textContent;
+            row.parentNode.removeChild(row);
+
+            var presenteesTable = document.getElementById("presentees");
+            var newRow = document.createElement("tr");
+
+            var nameCell = document.createElement("td");
+            nameCell.textContent = name;
+
+            var timeCell = document.createElement("td");
+            var now=new Date();
+            timeCell.textContent = now.toString();
+
+            newRow.appendChild(nameCell);
+            newRow.appendChild(timeCell);
+            presenteesTable.appendChild(newRow);
+
+        }
+    }
+  }
+
+  function populate() {
+    addAbsentee("Peter Lee");
+    addAbsentee("John Chan");
+    addAbsentee("Mary Hung");
+    addAbsentee("James Cheung");
+    addAbsentee("Paul Ho");
+    addAbsentee("Michael Yam");
+    addAbsentee("Isaac Wong");
+    addAbsentee("Abraham Kim");
+    addAbsentee("Joshua Hui");
+  }
+
+  function init() {
+    populate();
+    //TODO: Bind the click event of the "btnPresent" button to the moveRows() function
+    var btnPresent = document.getElementById("btnPresent");
+    btnPresent.addEventListener("click", moveRows);
+  }
+
+  window.onload = init;
+
+</script>
+</head>
+<body>
+
+  <h2>AST Attendance System</h2>
+
+  <div class="row">
+    <div class="column left">
+      <h3>Absentees</h3>
+      <table id="absentees" width="100%">
+        <tr>
+          <th></th>
+          <th>Student Name</th> 
+        </tr>
+      </table>
+    </div>
+    <div class="column middle">
+      <div class="center-content">
+        <button id="btnPresent">Present &gt;</button>
+      </div>
+    </div>
+    <div class="column right">
+      <h3>Presentees</h3>
+      <table id="presentees" width="100%">
+        <tr>
+          <th>Student Name</th> 
+          <th>Arrival Time</th>
+        </tr>
+      </table>
+    </div>
+  </div>
+
+</body>
+</html>
+
